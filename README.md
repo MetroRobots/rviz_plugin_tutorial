@@ -151,3 +151,55 @@ ros2 topic pub /point rviz_plugin_tutorial_msgs/msg/Point2D "{header: {frame_id:
 ```
 
 That should result in the "We got a message" logging to appear in the `stdout` of RViz.
+
+## Actual Visualization
+You can view the full version of this step with the branch name `step2`.
+
+First, you need to add a dependency in `CMakeLists.txt` and `package.xml` on the package `rviz_rendering`.
+
+We need to add three lines to the header file:
+ * `#include <rviz_rendering/objects/shape.hpp>` - There's [lots of options in the `rviz_rendering` package](https://github.com/ros2/rviz/tree/ros2/rviz_rendering/include/rviz_rendering/objects) for objects to build your visualization on. Here we're using a simple shape.
+ * In the class, we'll add a new `protected` virtual method: `void onInitialize() override;`
+ * We also add a pointer to our shape object: `std::unique_ptr<rviz_rendering::Shape> point_shape_;`
+
+Then in the cpp file, we define the `onInitialize` method:
+```c++
+void PointDisplay::onInitialize()
+{
+  MFDClass::onInitialize();
+  point_shape_ =
+      std::make_unique<rviz_rendering::Shape>(rviz_rendering::Shape::Type::Cube, scene_manager_, scene_node_);
+}
+```
+ * `MFDClass` is [aliased](https://github.com/ros2/rviz/blob/0ef2b56373b98b5536f0f817c11dc2b5549f391d/rviz_common/include/rviz_common/message_filter_display.hpp#L57) to the templated parent class for convenience.
+ * The shape object must be constructed here in the `onInitialize` method rather than the constructor because otherwise `scene_manager_` and `scene_node_` would not be ready.
+
+We also update our `processMessage` method:
+```c++
+void PointDisplay::processMessage(const rviz_plugin_tutorial_msgs::msg::Point2D::ConstSharedPtr msg)
+{
+  RVIZ_COMMON_LOG_INFO_STREAM("We got a message with frame " << msg->header.frame_id);
+
+  Ogre::Vector3 position;
+  Ogre::Quaternion orientation;
+  if (!context_->getFrameManager()->getTransform(msg->header, position, orientation))
+  {
+    RVIZ_COMMON_LOG_DEBUG_STREAM("Error transforming from frame '" << msg->header.frame_id << "' to frame '"
+                                                                   << qPrintable(fixed_frame_) << "'");
+  }
+
+  scene_node_->setPosition(position);
+  scene_node_->setOrientation(orientation);
+
+  Ogre::Vector3 point_pos;
+  point_pos.x = msg->x;
+  point_pos.y = msg->y;
+  point_shape_->setPosition(point_pos);
+}
+```
+
+ * We need to get the proper frame for our message and transform the `scene_node_` accordingly. This ensures that the visualization does not always appear relative to the fixed frame.
+ * The actual visualization that we've been building to this entire time is in the last four lines: we set the position of the visualization to match the message's position.
+
+The result should look like this:
+![screenshot of functioning display](doc/Step2A.png)
