@@ -1,0 +1,5 @@
+<library path="point_display">
+  <class type="rviz_plugin_tutorial::PointDisplay" base_class_type="rviz_common::Display">
+    <description></description>
+  </class>
+</library>
