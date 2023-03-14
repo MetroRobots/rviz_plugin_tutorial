@@ -273,3 +273,44 @@ You can also set the status of the display. As an arbitrary example, let's make 
 ![screenshot with ok status](doc/Step4A.png)
 
 ![screenshot with warning status](doc/Step4B.png)
+
+## Cleanup
+Now its time to clean it up a bit. This makes things look nicer and be a little easier to use, but aren't strictly required. You can view the full version of this step with the branch name `step5`.
+
+First, we update the plugin declaration.
+
+```xml
+<library path="point_display">
+  <class name="Point2D" type="rviz_plugin_tutorial::PointDisplay" base_class_type="rviz_common::Display">
+    <description>Tutorial to display a point</description>
+    <message_type>rviz_plugin_tutorial_msgs/msg/Point2D</message_type>
+  </class>
+</library>
+```
+ * We add the `name` field to the `class` tag. This changes the name that is displayed in RViz. In code, it makes sense to call it a `PointDisplay` but in RViz, we want to simplify.
+ * We put actual text into the description. Don't be lazy.
+ * By declaring the specific message type here, when you attempt to add a Display by Topic, it will suggest this plugin for the topics of that type.
+
+We also add an icon for the plugin at `icons/classes/Point2D.png`. The folder is hardcoded, and the filename should match the name from the plugin declaration (or the name of the class if not specified). [[icon source]](
+https://commons.wikimedia.org/wiki/File:Free_software_icon.svg)
+
+We need to install the image file in the CMake.
+```cmake
+install(FILES icons/classes/Point2D.png
+        DESTINATION share/${PROJECT_NAME}/icons/classes
+)
+```
+
+Now when you add the display, it should show up with an icon and description.
+
+![screenshot with added icon and description](doc/Step5A.png)
+
+Here is the display when attempting to add by topic:
+
+![screenshot with add by topic dialog](doc/Step5B.png)
+
+And finally, here's the icon in the standard interface:
+
+![screenshot with icon in standard interface](doc/Step5C.png)
+
+Note, if you change the plugins name, previous RViz configurations will no longer work.
