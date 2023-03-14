@@ -227,3 +227,42 @@ If the box does not appear in that location, it might be because:
  * You are not publishing the topic at this time
  * The message hasn't been published in the last 2 seconds.
  * You did not properly set the topic in RViz.
+
+## It's Nice to Have Options.
+
+If you want to allow users to customize different properties of the visualization, you need to add [`rviz_common::Property` objects](https://github.com/ros2/rviz/tree/ros2/rviz_common/include/rviz_common/properties).
+
+You can view the full version of this step with the branch name `step3`.
+
+### Header Updates
+ * `#include <rviz_common/properties/color_property.hpp>` Color is but one of many properties you can set.
+ * ```c++
+   private Q_SLOTS:
+     void updateStyle();
+  ``` This gets called whenever the gui is changed, via Qt's SLOT/SIGNAL framework.
+ * `std::unique_ptr<rviz_common::properties::ColorProperty> color_property_;` The property itself.
+
+### Cpp Updates
+ * `#include <rviz_common/properties/parse_color.hpp>` - Contains helper function to convert property to OGRE color.
+ * To our `onInitialize` we add
+   ```c++
+    color_property_ = std::make_unique<rviz_common::properties::ColorProperty>(
+        "Point Color", QColor(36, 64, 142), "Color to draw the point.", this, SLOT(updateStyle()));
+    updateStyle();
+   ```
+    * This constructs the object with its name, default value, description and the callback.
+    * We call `updateStyle` directly so that the color is set at the beginning even before the property is changed.
+ * Then we define the callback.
+   ```c++
+    void PointDisplay::updateStyle()
+    {
+      Ogre::ColourValue color = rviz_common::properties::qtToOgre(color_property_->getColor());
+      point_shape_->setColor(color);
+    }
+   ```
+
+The result should look like this:
+![screenshot with color property](doc/Step3A.png)
+
+Ooh, pink!
+![screenshot with changed color](doc/Step3B.png)
