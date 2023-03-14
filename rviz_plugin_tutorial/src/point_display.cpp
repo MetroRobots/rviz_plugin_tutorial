@@ -34,6 +34,8 @@
 
 namespace rviz_plugin_tutorial
 {
+using rviz_common::properties::StatusProperty;
+
 void PointDisplay::onInitialize()
 {
   MFDClass::onInitialize();
@@ -59,6 +61,13 @@ void PointDisplay::processMessage(const rviz_plugin_tutorial_msgs::msg::Point2D:
 
   scene_node_->setPosition(position);
   scene_node_->setOrientation(orientation);
+
+  if (msg->x < 0) {
+    setStatus(StatusProperty::Warn, "Message",
+        "I will complain about points with negative x values.");
+  } else {
+    setStatus(StatusProperty::Ok, "Message", "OK");
+  }
 
   Ogre::Vector3 point_pos;
   point_pos.x = msg->x;
