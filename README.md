@@ -248,3 +248,28 @@ The result should look like this:
 
 Ooh, pink!
 ![screenshot with changed color](doc/Step3B.png)
+
+
+## Status Report
+You can view the full version of this step with the branch name `step4`.
+
+You can also set the status of the display. As an arbitrary example, let's make our display show a warning when the x coordinate is negative, because why not? In `processMessage`:
+
+```c++
+  if (msg->x < 0)
+  {
+    setStatus(StatusProperty::Warn, "Message", "I will complain about points with negative x values.");
+  }
+  else
+  {
+    setStatus(StatusProperty::Ok, "Message", "OK");
+  }
+```
+
+ * We're assuming a previous `using rviz_common::properties::StatusProperty;` declaration.
+ * Think of the status as Key/Value pairs, with the key being some string (here we're using `"Message"`) and the values are the status level (error/warn/ok) and the description (some other string).
+
+
+![screenshot with ok status](doc/Step4A.png)
+
+![screenshot with warning status](doc/Step4B.png)
