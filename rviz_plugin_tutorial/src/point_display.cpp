@@ -35,6 +35,7 @@
 /* Author: David V. Lu!! */
 
 #include <rviz_plugin_tutorial/point_display.hpp>
+#include <rviz_common/properties/parse_color.hpp>
 #include <rviz_common/logging.hpp>
 
 namespace rviz_plugin_tutorial
@@ -44,6 +45,10 @@ void PointDisplay::onInitialize()
   MFDClass::onInitialize();
   point_shape_ =
       std::make_unique<rviz_rendering::Shape>(rviz_rendering::Shape::Type::Cube, scene_manager_, scene_node_);
+
+  color_property_ = std::make_unique<rviz_common::properties::ColorProperty>(
+      "Point Color", QColor(36, 64, 142), "Color to draw the point.", this, SLOT(updateStyle()));
+  updateStyle();
 }
 
 void PointDisplay::processMessage(const rviz_plugin_tutorial_msgs::msg::Point2D::ConstSharedPtr msg)
@@ -66,6 +71,13 @@ void PointDisplay::processMessage(const rviz_plugin_tutorial_msgs::msg::Point2D:
   point_pos.y = msg->y;
   point_shape_->setPosition(point_pos);
 }
+
+void PointDisplay::updateStyle()
+{
+  Ogre::ColourValue color = rviz_common::properties::qtToOgre(color_property_->getColor());
+  point_shape_->setColor(color);
+}
+
 }  // namespace rviz_plugin_tutorial
 
 #include <pluginlib/class_list_macros.hpp>
