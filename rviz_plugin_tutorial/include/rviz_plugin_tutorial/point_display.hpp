@@ -34,7 +34,8 @@
 
 /* Author: David V. Lu!! */
 
-#pragma once
+#ifndef RVIZ_PLUGIN_TUTORIAL__POINT_DISPLAY_HPP_
+#define RVIZ_PLUGIN_TUTORIAL__POINT_DISPLAY_HPP_
 
 #include <rviz_common/message_filter_display.hpp>
 #include <rviz_common/properties/color_property.hpp>
@@ -59,3 +60,5 @@ protected:
   std::unique_ptr<rviz_common::properties::ColorProperty> color_property_;
 };
 }  // namespace rviz_plugin_tutorial
+
+#endif  // RVIZ_PLUGIN_TUTORIAL__POINT_DISPLAY_HPP_
