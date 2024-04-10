@@ -57,4 +57,9 @@ ament_export_include_directories(include)
 ament_export_targets(export_rviz_plugin_tutorial)
 pluginlib_export_plugin_description_file(rviz_common rviz_common_plugins.xml)
 
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
 ament_package()
