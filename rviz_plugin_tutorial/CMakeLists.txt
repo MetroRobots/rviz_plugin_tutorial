@@ -27,7 +27,7 @@ qt5_wrap_cpp(MOC_FILES
   include/rviz_plugin_tutorial/point_display.hpp
 )
 
-add_library(point_display src/point_display.cpp ${MOC_FILES})
+add_library(point_display SHARED src/point_display.cpp ${MOC_FILES})
 target_include_directories(point_display PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
