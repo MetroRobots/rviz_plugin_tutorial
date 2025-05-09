@@ -32,11 +32,11 @@ target_include_directories(point_display PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-ament_target_dependencies(point_display
-  pluginlib
-  rviz_common
-  rviz_plugin_tutorial_msgs
-  rviz_rendering
+target_link_libraries(point_display PUBLIC
+  ${rviz_plugin_tutorial_msgs_TARGETS}
+  pluginlib::pluginlib
+  rviz_common::rviz_common
+  rviz_rendering::rviz_rendering
 )
 install(TARGETS point_display
         EXPORT export_rviz_plugin_tutorial
