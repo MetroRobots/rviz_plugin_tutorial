@@ -153,11 +153,11 @@ pluginlib_export_plugin_description_file(rviz_common rviz_common_plugins.xml)
  * A lot of the other code ensures that the plugin portion works. Namely, calling `pluginlib_export_plugin_description_file` is essential to getting RViz to find your new plugin.
 
 ### How to build the plugin
-Great tutorial, but I think it needs a quick description of how to compile the plugin. 
+Great tutorial, but I think it needs a quick description of how to compile the plugin.
 
 Do you need colcon? A special way to call cmake? Do you compile and then install rviz_plugin_tutorial_msgs first?
 
-I'm sure this is obvious to regular ROS2 developers, but new readers (like me) would benefit from some build instruction. 
+I'm sure this is obvious to regular ROS2 developers, but new readers (like me) would benefit from some build instruction.
 
 ### Testing it out
 Compile your code and run `rviz2`. You should be able to add your new plugin by clicking `Add` in the bottom left, and then selecting your package/plugin.
