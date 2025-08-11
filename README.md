@@ -153,13 +153,13 @@ pluginlib_export_plugin_description_file(rviz_common rviz_common_plugins.xml)
  * A lot of the other code ensures that the plugin portion works. Namely, calling `pluginlib_export_plugin_description_file` is essential to getting RViz to find your new plugin.
 
 ### How to build the plugin
-The plugin is built like any ROS2 package. 
-First, you need a ROS2 installation. 
-At the time of writing, the most recent release is `kilted`. 
-You can build ROS2 source by following [this tutorial](https://docs.ros.org/en/kilted/Installation/Alternatives/Ubuntu-Development-Setup.html) for Ubuntu 24. 
+The plugin is built like any ROS2 package.
+First, you need a ROS2 installation.
+At the time of writing, the most recent release is `kilted`.
+You can build ROS2 source by following [this tutorial](https://docs.ros.org/en/kilted/Installation/Alternatives/Ubuntu-Development-Setup.html) for Ubuntu 24.
 If you follow the defaults, you will end up with a directory called `~/ros2_kilted` containing all the ROS2 source and binaries.
 
-You should build `rviz_plugin_tutorial` in an *overlay workspace*. That means creating a new folder, separate from `ros2_kilted`. 
+You should build `rviz_plugin_tutorial` in an *overlay workspace*. That means creating a new folder, separate from `ros2_kilted`.
 It's common to name this `ros2_ws` and create an `src` folder within:
 
 ```bash
@@ -176,9 +176,9 @@ Now you use the `colcon` build tool to coordinate the cmake-driven compilation o
 ```bash
 $ colcon build --symlink-install
 Starting >>> rviz_plugin_tutorial_msgs
-Finished <<< rviz_plugin_tutorial_msgs [8.27s]                    
+Finished <<< rviz_plugin_tutorial_msgs [8.27s]
 Starting >>> rviz_plugin_tutorial
-Finished <<< rviz_plugin_tutorial [10.8s]                      
+Finished <<< rviz_plugin_tutorial [10.8s]
 
 Summary: 2 packages finished [19.8s]
 ```
