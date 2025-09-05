@@ -12,7 +12,7 @@ repos:
   - id: check-symlinks
   - id: check-case-conflict
   - id: check-xml
-  rev: v5.0.0
+  rev: v6.0.0
 - repo: https://github.com/codespell-project/codespell
   hooks:
   - id: codespell
