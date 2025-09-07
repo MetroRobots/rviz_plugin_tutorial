@@ -152,8 +152,44 @@ pluginlib_export_plugin_description_file(rviz_common rviz_common_plugins.xml)
    ```
  * A lot of the other code ensures that the plugin portion works. Namely, calling `pluginlib_export_plugin_description_file` is essential to getting RViz to find your new plugin.
 
+### How to build the plugin
+The plugin is built like any ROS2 package.
+First, you need a ROS2 installation.
+At the time of writing, the most recent release is `kilted`.
+You can build ROS2 source by following [this tutorial](https://docs.ros.org/en/kilted/Installation/Alternatives/Ubuntu-Development-Setup.html) for Ubuntu 24.
+If you follow the defaults, you will end up with a directory called `~/ros2_kilted` containing all the ROS2 source and binaries.
+
+You should build `rviz_plugin_tutorial` in an *overlay workspace*. That means creating a new folder, separate from `ros2_kilted`.
+It's common to name this `ros2_ws` and create an `src` folder within:
+
+```bash
+$ mkdir ~/ros2_ws
+$ cd ~/ros2_ws
+$ mkdir src
+```
+Place your source code in `ros2_ws/src`:
+```bash
+$ cd ~/ros2_ws/src
+$ git clone git@github.com/MetroRobots/rviz_plugin_tutorial
+```
+Now you use the `colcon` build tool to coordinate the cmake-driven compilation of `rviz_plugin_tutorial`:
+```bash
+$ colcon build --symlink-install
+Starting >>> rviz_plugin_tutorial_msgs
+Finished <<< rviz_plugin_tutorial_msgs [8.27s]
+Starting >>> rviz_plugin_tutorial
+Finished <<< rviz_plugin_tutorial [10.8s]
+
+Summary: 2 packages finished [19.8s]
+```
+Before running `rviz2`, make sure that your plugin will be available by activating the `ros2_ws`:
+```bash
+$ source install/setup.bash
+```
+You can learn more about `colcon` and workspaces from [this tutorial](https://docs.ros.org/en/kilted/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html).
+
 ### Testing it out
-Compile your code and run `rviz2`. You should be able to add your new plugin by clicking `Add` in the bottom left, and then selecting your package/plugin.
+Once you've compiled your code (and activated the build) run `rviz2`. You should be able to add your new plugin by clicking `Add` in the bottom left, and then selecting your package/plugin.
 
 ![screenshot of adding display](doc/Step1A.png)
 
