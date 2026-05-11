@@ -15,6 +15,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# Pre-probe both Qt versions with components so componentless re-lookups
+# inside rviz_common's exported dependency file are satisfied via cache.
+find_package(Qt6 QUIET COMPONENTS Widgets)
+find_package(Qt5 QUIET COMPONENTS Widgets)
+
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_ros REQUIRED)
 find_package(pluginlib REQUIRED)
@@ -22,10 +27,31 @@ find_package(rviz_common REQUIRED)
 find_package(rviz_plugin_tutorial_msgs REQUIRED)
 find_package(rviz_rendering REQUIRED)
 
+# Match the Qt version that rviz_common actually links against. Inspect
+# its link interface — Qt6 preferred, Qt5 fallback.
+get_target_property(_rviz_common_link rviz_common::rviz_common INTERFACE_LINK_LIBRARIES)
+if("${_rviz_common_link}" MATCHES "Qt6::")
+  set(QT_VERSION_MAJOR 6)
+elseif("${_rviz_common_link}" MATCHES "Qt5::")
+  set(QT_VERSION_MAJOR 5)
+elseif(Qt6_FOUND)
+  set(QT_VERSION_MAJOR 6)
+elseif(Qt5_FOUND)
+  set(QT_VERSION_MAJOR 5)
+else()
+  message(FATAL_ERROR "Neither Qt6 nor Qt5 was found")
+endif()
+
 set(CMAKE_AUTOMOC ON)
-qt5_wrap_cpp(MOC_FILES
-  include/rviz_plugin_tutorial/point_display.hpp
-)
+if(QT_VERSION_MAJOR EQUAL 6)
+  qt6_wrap_cpp(MOC_FILES
+    include/rviz_plugin_tutorial/point_display.hpp
+  )
+else()
+  qt5_wrap_cpp(MOC_FILES
+    include/rviz_plugin_tutorial/point_display.hpp
+  )
+endif()
 
 add_library(point_display src/point_display.cpp ${MOC_FILES})
 target_include_directories(point_display PUBLIC
